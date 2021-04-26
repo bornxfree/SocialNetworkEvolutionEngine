@@ -117,11 +117,6 @@ class SocialNetwork():
 
         if 'file' in self._properties: self._read( self._properties['file'] )
         else: self._build()
-        
-#        for key in self._properties:
-#            print( key )
-#            print( self._properties[key] )
-#            print( type( self._properties[key] ) )
 
     ## A function to log basic interactions.  Used to keep track of parameter
     ## settings and input/output file locations, etc.
@@ -251,11 +246,9 @@ class SocialNetwork():
         ## attributes of different types.
         attr = {}
         for key in self._properties:
-            if key in [ 'attribute_space', 'correlations', 'steps_since',
-                        'agent_xy' ]:
+            if key in [ 'attribute_space', 'correlations' ]:
                 attr[key] = matrix_to_string( self._properties[key] )
-            elif key in [ 'types', 'resistance', 'home_locations',
-                          'agent_locations', 'iswearing', 'businesses' ]:
+            elif key in [ 'types', 'resistance' ]:
                 attr[key] = vector_to_string( self._properties[key] )
             ## Skip over these because they get written out at the Node level.
             elif key in [ 'weights', 'normalized_weights', 'masks' ]:
@@ -784,6 +777,7 @@ class SocialNetwork():
         while cmd != 'q':
 
             cmd = input( '\n>>> ' )
+            if cmd == '': continue
             cmdline = cmd.split()
 
             ## Add cases for commands here
@@ -1109,9 +1103,7 @@ class SocialNetwork():
         print( 'Exiting debugger.' )
         return
 
-
-
-
+    ## Custom getters for several networkx metrics
     def get_networkx_metric( self, metric, t=None ):
 
         if metric == 'degree':
