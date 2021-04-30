@@ -622,8 +622,10 @@ class SocialNetwork():
     ## Recalculate weights for u and v.
     def disconnect( self, u, v ):
 
+        if u == v: return
+
         ## Chance of not deleting link.
-        if rnd.random() < self._properties['unfriend']: return
+        if rnd.random() > self._properties['unfriend']: return
         
         try:
             self._graph.remove_edge( u, v )
@@ -647,6 +649,8 @@ class SocialNetwork():
     def connect( self, u, v ):
 
         if u == v: return
+
+        if rnd.random() > self._properties['friend']: return
         
         ## Add edge to graph structure
         self._graph.add_edge( u, v )
@@ -745,10 +749,7 @@ class SocialNetwork():
             for nbr in nbrs:
                 r = self.get_reward_for_neighbor( i, nbr )
                 if r < self._properties['unfriend_threshold']:
-
-                    p = rnd.random()
-                    if p < self._properties['unfriend']:
-                        self.disconnect( i, nbr )
+                    self.disconnect( i, nbr )
 
     ## A function to add edges in the network.
     ## By default, choose 5 random neighbor candidates for each node and
@@ -759,9 +760,7 @@ class SocialNetwork():
         for i in range( n ):
             candidates = set( [ int( rnd.random() * n ) for j in range( 5 ) ] )
             for c in candidates:
-                p = rnd.random()
-                if p < self._properties['friend']:
-                    self.connect( c, i )
+                self.connect( c, i )
 
     def debug( self, frominherited=False, mycommand='' ):
 
